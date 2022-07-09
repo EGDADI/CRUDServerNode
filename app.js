@@ -59,11 +59,13 @@ app.get('/gettask', function(req, res) {
    
 });
 
-app.post('/addtask', function(req, res) {
+app.get('/addtask', function(req, res) {
     let tache = req.query.tache || '';
-
-    var sql = "INSERT INTO tablelist (tache, status) VALUES (" + tache + " , 'todo')";
-    con.query(sql, function (err, result) {
+    let desctache = req.query.desctache || '';
+    console.log(desctache+"1 record inserted"+tache);
+    var sql = "INSERT INTO tablelist (tache, status,description) VALUES ? ";
+    var values = [[tache,"todo",desctache]];
+    con.query(sql,[values], function (err, result) {
       if (err) throw err;
       console.log("1 record inserted");
     });
@@ -76,9 +78,11 @@ app.post('/addtask', function(req, res) {
 
 app.get('/updatetask', function(req, res) {
     let tache = req.query.tache || '';
+   //tache = "gg"
     let statusupdate = req.query.statusupdate || '';
-//
-    var sql = "UPDATE tablelist SET status = "+ statusupdate +" WHERE tache = " + tache + "";
+console.log("td"+tache)
+
+    var sql = "UPDATE tablelist SET status ='"+ statusupdate +"' WHERE tache = '" + tache + "'";
   //  var sql = "UPDATE tablelist SET status = 'inprogress' WHERE tache = 'test 2'";
     con.query(sql, function (err, result) {
     if (err) throw err;
@@ -96,7 +100,7 @@ app.get('/updatetask', function(req, res) {
 app.get('/deletetask', function(req, res) {
     let tache = req.query.tache || '';
 
-    var sql = "DELETE FROM tablelist WHERE tache = "+tache+"";
+    var sql = "DELETE FROM tablelist WHERE tache = '"+tache+"'";
     con.query(sql, function (err, result) {
       if (err) throw err;
       console.log("Number of records deleted: " + result.affectedRows);

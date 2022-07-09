@@ -6,7 +6,7 @@ function gettodo(){
         	responseJSON.json()
         	.then(function(res) {
         	
-        		afficheReponseGET(res,"#todoTask");
+        		afficheReponseGET(res,"todoTask");
         	});
     	})
     	.catch(function (err) {
@@ -19,16 +19,25 @@ function gettodo(){
 // Affichage d'une réponse JSON
 function afficheReponseGET(reponse,divName) {
     let div = document.querySelector(divName);
-    div.innerHTML = reponse.msg;
+    document.getElementById(divName).innerHTML = "";
+  
+    let list = document.getElementById(divName);
+      
+    reponse.forEach((item)=>{
+    let li = document.createElement("li");
+    console.log( item.tache);
+    li.innerText = item.tache;
+    list.appendChild(li);
+  })
+   
 
-    // Dans reponse.data j'ai les restaurants
-    afficheRestaurantsEnTable(reponse.data);
+    
 }
 
 
 
 
-function inprogressdoneTask(){
+function getinprogress(){
    
 
     let url = "/gettask?status='inprogress'"
@@ -38,14 +47,14 @@ function inprogressdoneTask(){
         	responseJSON.json()
         	.then(function(res) {
         	
-        		afficheReponseGET(res,"#inprogressdoneTask");
+        		afficheReponseGET(res,"inprogress");
         	});
     	})
     	.catch(function (err) {
         	console.log(err);
     });
 }
-function doneTask(){
+function getTaskdone(){
     let url = "/gettask?status='done'"
 
     fetch(url)
@@ -53,7 +62,7 @@ function doneTask(){
         	responseJSON.json()
         	.then(function(res) {
         	
-        		afficheReponseGET(res,"#doneTask");
+        		afficheReponseGET(res,"doneTask");
         	});
     	})
     	.catch(function (err) {
@@ -62,13 +71,76 @@ function doneTask(){
 
 
 }
-function getQuestion(){
-    let url = "/addtask"
+function addtask(){
+
+
+    let na = document.getElementById("nameTask").value;
+    let de = document.getElementById("descTask").value;
+
+
+        let url = "/addtask?tache="+na+"&desctache="+de+"";
+    
+        fetch(url)
+            .then(function(responseJSON) {
+              
+                responseJSON.json()
+                .then(function(res) {
+                
+                    console.log("done")
+                });
+            })
+            .catch(function (err) {
+                console.log(err);
+        });
 
 
 }
-function getQuestion(){
-    let url = "/addupdate"
 
 
+function updatetask(){
+let na = document.getElementById("nameTasktoupdate").value;
+let status = document.getElementById("status").value;
+
+
+console.log(na.type)
+    let url = "/updatetask?tache="+na+"&statusupdate="+status+"";
+
+    fetch(url)
+        .then(function(responseJSON) {
+          
+            responseJSON.json()
+            .then(function(res) {
+            
+                console.log("done")
+            });
+        })
+        .catch(function (err) {
+            console.log(err);
+    });
+
+
+}
+
+function deletetask(){
+  
+
+    let na = document.getElementById("nameTasktodelete").value;
+    let status = document.getElementById("status").value;
+    
+    
+    console.log(na.type)
+        let url = "/deletetask?tache="+na+"";
+    
+        fetch(url)
+            .then(function(responseJSON) {
+              
+                responseJSON.json()
+                .then(function(res) {
+                
+                    console.log("done")
+                });
+            })
+            .catch(function (err) {
+                console.log(err);
+        });
 }
